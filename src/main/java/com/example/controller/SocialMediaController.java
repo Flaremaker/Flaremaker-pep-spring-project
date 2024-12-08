@@ -19,6 +19,8 @@ import com.example.entity.Message;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
 
+import net.bytebuddy.asm.Advice.Argument;
+
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
  * found in readme.md as well as the test cases. You be required to use the @GET/POST/PUT/DELETE/etc Mapping annotations
@@ -71,15 +73,13 @@ public class SocialMediaController {
     }
 
     @PatchMapping("/messages/{messageId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateMessage(@PathVariable Integer messageId, @RequestBody String messageText){
-        messageService.updateMessage(messageId,messageText);
+    public String updateMessage(@PathVariable Integer messageId,  @RequestBody String messageText){
+        return messageService.updateMessage(messageId,messageText);
     }
 
     @DeleteMapping("/messages/{messageId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteMessage(@PathVariable Integer messageId){
-        messageService.removeMessage(messageId);
+    public String deleteMessage(@PathVariable Integer messageId){
+        return messageService.removeMessage(messageId);
     }
 
 

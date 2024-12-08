@@ -7,8 +7,13 @@ import org.springframework.stereotype.Service;
 import com.example.entity.Message;
 import com.example.exception.NullException;
 import com.example.repository.MessageRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import antlr.StringUtils;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -65,28 +70,48 @@ public class MessageService {
         if (message.isPresent()) {
             return message.get();
         } else {
-            throw new NullException("Error");
+            return null;
         }
     }
+    //Update message method
+    public String updateMessage(Integer id, String messsageText) {
+        String text = "";
+        ObjectMapper objectMapper = new ObjectMapper();
 
-    public Message updateMessage(Integer id, String messsageText) {
+        try {
+            @SuppressWarnings("unchecked")
+            Map<String, String> map = objectMapper.readValue(messsageText, Map.class);
+             text =  map.get("messageText");
+        } catch (Exception e) {
+            throw new NullException("Message Blank");
+        }
+        
         Optional<Message> oldMessage = messageRepository.findById(id);
-      
+    
         if(!oldMessage.isPresent()){
             throw new NullException("Not present for update");
+            
         }
-        if (messsageText.equals(null) || messsageText.isBlank()) {
+        
+        if (messsageText == null || text.isBlank() || text.contentEquals("") || text.equals("")){
             throw new NullException("Message Blank");
         }
         if (messsageText.length() > 255) {
             throw new NullException("Message length to long");
-        } else {
-            oldMessage.get().setMessageText(messsageText);
-            return messageRepository.save(oldMessage.get());
-        }
+        } 
+        System.out.println("dasdasdasdad" + text);
+            oldMessage.get().setMessageText(text);
+            messageRepository.save(oldMessage.get());
+            return "1";
+        
     }
 
-    public void removeMessage(Integer id) {
+    public String removeMessage(Integer id) {
+       if(messageRepository.findById(id).isPresent()){
         messageRepository.deleteById(id);
+        return "1";
+       }
+
+        return "";
     }
 }
