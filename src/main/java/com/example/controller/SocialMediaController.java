@@ -41,7 +41,7 @@ public class SocialMediaController {
         this.messageService = messageService;
         this.accountService = accountService;
     }
-
+    //Account login and Register
     @PostMapping("/register")
     public Account registerAccount(@RequestBody Account account) {
         return accountService.registerAccount(account);
@@ -52,6 +52,7 @@ public class SocialMediaController {
         return accountService.loginAccount(account);
     }
 
+    //Message controler specfic options
     @PostMapping("/messages")
     public Message createMessage(@RequestBody Message message) {
         return messageService.saveMessage(message);

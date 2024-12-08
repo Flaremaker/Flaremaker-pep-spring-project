@@ -36,7 +36,7 @@ public class MessageService {
         this.messageRepository = messageRepository;
         this.accountRepository = accountRepository;
     }
-
+    //Saves new user calls saves in repo
     @Transactional
     public Message saveMessage(Message message) {
         if (message.getMessageText().isBlank() || message == null) {
@@ -51,19 +51,19 @@ public class MessageService {
         }
 
     }
-
+    //Find messeges by account Id created repo for this method
     public List<Message> findMessageByAccountId(Integer id){
         List<Message> messageList = messageRepository.findByPostedBy(id);
        
         return messageList; 
 }
-
+    //find all messages 
     public List<Message> findAllMessages() {
         List<Message> messageList = messageRepository.findAll();
 
         return messageList;
     }
-
+    // calles the find  by id in the repository
     public Message findMessageById(Integer id) {
         Optional<Message> message = messageRepository.findById(id);
 
@@ -73,7 +73,7 @@ public class MessageService {
             return null;
         }
     }
-    //Update message method
+    //Update message method needed to retrive the empty structure and no the json
     public String updateMessage(Integer id, String messsageText) {
         String text = "";
         ObjectMapper objectMapper = new ObjectMapper();
@@ -105,7 +105,7 @@ public class MessageService {
             return "1";
         
     }
-
+    // Removes the message which calls deletebyId from the repo
     public String removeMessage(Integer id) {
        if(messageRepository.findById(id).isPresent()){
         messageRepository.deleteById(id);
